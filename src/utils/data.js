@@ -1,42 +1,27 @@
 export const APP_FEATURES = [
   {
     id: "01",
-    title: "User Authentication",
-    description: "Secure login and registration system to manage individual user sessions."
+    title: "Secure User Login",
+    description: "Easily sign up or log in to manage your personalized interview preparation progress with secure sessions."
   },
   {
     id: "02",
-    title: "Personalized Prep Modals",
-    description: "Users can create different interview prep tracks based on role and experience."
+    title: "Custom Prep Tracks",
+    description: "Create interview prep modules tailored to specific roles, experience levels, and domains—like Frontend Dev, DevOps, or SDE Intern."
   },
   {
     id: "03",
-    title: "AI-Powered Topic Generation",
-    description: "Generate key interview topics using Google Gemini API based on user-defined roles."
+    title: "AI-Powered Question Generation",
+    description: "Leverage Google Gemini API to generate role-specific interview questions instantly based on your selected track."
   },
   {
     id: "04",
-    title: "In-Depth Topic Explanations",
-    description: "Users can click 'Learn More' to fetch deeper AI-generated explanations for any topic."
+    title: "Interactive Concept Learning",
+    description: "Click on any topic to expand it and receive in-depth AI-generated explanations to understand the 'why' behind every answer."
   },
   {
     id: "05",
-    title: "Dashboard View",
-    description: "Overview of all prep modals created by the user, accessible from a single dashboard."
+    title: "Centralized User Dashboard",
+    description: "Access and manage all your prep modules in one place with a clean, organized dashboard layout."
   },
-  {
-    id: "06",
-    title: "Persistent Data Storage",
-    description: "All user modals and topic data are stored in the database for future access."
-  },
-  {
-    id: "07",
-    title: "Responsive UI",
-    description: "Clean and intuitive interface built using React and TailwindCSS for all device sizes."
-  },
-  {
-    id: "08",
-    title: "Progress Tracking (Coming Soon)",
-    description: "Mark topics as started or completed to track learning progress (future version)."
-  }
 ];
