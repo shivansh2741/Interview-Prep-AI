@@ -70,7 +70,7 @@ const SignUp = (props) => {
     }
 
     return (
-        <div className="flex flex-col px-12 min-w-100">
+        <div className="flex flex-col lg:px-12">
             <header className="mb-8">
                 <h2 className="font-bold text-2xl">Welcome</h2>
                 <span className="text-xs">Please enter your details</span>
