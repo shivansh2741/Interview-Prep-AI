@@ -54,9 +54,19 @@ const Login = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+    
         if (formDataValidation(loginData)) {
-            //perform login
+            try {
+                //LOGIN API CALL
+            }
+            catch(error){
+                if(error.response && error.response.data.message){
+                    console.log(error.response.data.message);
+                }
+                else {
+                    console.log('Something went wrong. Please try again.')
+                }
+            }
         }
     }
 
