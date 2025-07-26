@@ -1,5 +1,8 @@
 import { useState } from "react";
 import Input from "../components/Input";
+import axiosInstance from "../utils/axiosInstance";
+import { API_PATHS } from '../utils/apiPaths';
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
 
@@ -7,6 +10,8 @@ const Login = (props) => {
 
     const [loginData, setLoginData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
+
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -52,15 +57,27 @@ const Login = (props) => {
         else return false;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (formDataValidation(loginData)) {
+            const {email, password } = loginData;``
             try {
-                //LOGIN API CALL
+                const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+                    email,
+                    password
+                });
+
+                const  token = response.data.token;
+
+                if(token){
+                    localStorage.setItem('token', token);
+                    navigate('/dashboard');
+                }
+                return response.data;
             }
-            catch(error){
-                if(error.response && error.response.data.message){
+            catch (error) {
+                if (error.response && error.response.data.message) {
                     console.log(error.response.data.message);
                 }
                 else {

@@ -1,7 +1,7 @@
 export const BASE_URL = "http://localhost:8000";
 
 
-const API_PATHS = {
+export const API_PATHS = {
     AUTH: {
         REGISTER: "/api/auth/register",
         LOGIN: "/api/auth/login",
