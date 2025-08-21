@@ -36,7 +36,7 @@ const UserProvider = ({ children }) => {
             }
         }
         fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const updateUser = (userData) => {
@@ -54,6 +54,7 @@ const UserProvider = ({ children }) => {
         setUser(null);
     }
 
+    console.log(user)
     return (
         <UserContext.Provider
             value={{ user, loading, updateUser, clearUser }}
