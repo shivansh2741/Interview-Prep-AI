@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../components/Input";
+import { UserContext } from "../context/UserProvider";
+import axiosInstance from "../utils/axiosInstance";
+import { API_PATHS } from "../utils/apiPaths";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = (props) => {
 
@@ -7,6 +11,9 @@ const SignUp = (props) => {
 
     const [signupData, setSignupData] = useState({ name: '', email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
+    const { updateUser } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -57,11 +64,38 @@ const SignUp = (props) => {
         else return false;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (formDataValidation(signupData)) {
-            //perform login
+            try {
+                // if(profilePic){
+                //     const imageUploadRes = await uploadImage(profilePic);
+                //     profileImageUrl = imageUploadRes.imageUrl || "";
+                // } uploadImage functoon at 1:59
+                const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+                    name: signupData.name,
+                    email: signupData.email,
+                    password: signupData.password
+                    // profileImageUrl,
+                });
+
+                const { token } = response.data;
+
+                if (token) {
+                    localStorage.setItem("token", token);
+                    updateUser(response.data);
+                    navigate('/dashboard');
+                }
+            }
+            catch (error) {
+                if (error.response && error.response.data.message) {
+                    console.log(error.response.data.message);
+                }
+                else {
+                    console.log('Something went wrong. Please try again.')
+                }
+            }
         }
     }
 

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../components/Input";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from '../utils/apiPaths';
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserProvider";
 
 const Login = (props) => {
 
@@ -10,6 +11,7 @@ const Login = (props) => {
 
     const [loginData, setLoginData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
+    const { updateUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -61,17 +63,17 @@ const Login = (props) => {
         e.preventDefault();
 
         if (formDataValidation(loginData)) {
-            const {email, password } = loginData;``
+            const { email, password } = loginData; 
             try {
                 const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
                     email,
                     password
                 });
 
-                const  token = response.data.token;
+                const token = response.data.token;
 
-                if(token){
-                    localStorage.setItem('token', token);
+                if (token) {
+                    updateUser(response.data)
                     navigate('/dashboard');
                 }
                 return response.data;

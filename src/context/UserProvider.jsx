@@ -1,17 +1,26 @@
-Appimport { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { createContext } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 
 
-const UserContext = createContext();
+// eslint-disable-next-line react-refresh/only-export-components
+export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (user) return;
+
+        const accessToken = localStorage.getItem("token");
+        if (!accessToken) {
+            setLoading(false);
+            return;
+        }
+
         const fetchProfile = async () => {
             setLoading(true);
             try {
@@ -27,9 +36,11 @@ const UserProvider = ({ children }) => {
             }
         }
         fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const updateUser = (userData) => {
+        localStorage.setItem("token", userData.token);
         setUser((prev) => {
             return {
                 ...prev,
@@ -39,6 +50,7 @@ const UserProvider = ({ children }) => {
     };
 
     const clearUser = () => {
+        localStorage.removeItem("token");
         setUser(null);
     }
 

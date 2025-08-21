@@ -1,14 +1,17 @@
-// import { Navigate } from "react-router-dom";
 import { APP_FEATURES } from "../../utils/data";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Sparkle } from "@phosphor-icons/react";
 import Modal from "../../components/Modal";
 import Login from "../Login";
 import SignUp from "../Signup";
+import { UserContext } from "../../context/UserProvider";
+import { useNavigate } from "react-router-dom";
+import ProfileInfoCard from "../../components/Card/ProfileInfoCard";
 
 
 const LandingPage = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext)
     const [openAuthModal, setOpenAuthModal] = useState(false)
 
     const [currentPage, setCurrentPage] = useState("login")
@@ -19,7 +22,12 @@ const LandingPage = () => {
     }
 
     const handleCTA = () => {
-
+        if (!user) {
+            setOpenAuthModal(true);
+        }
+        else {
+            navigate("/dashboard");
+        }
     }
 
     const onClose = () => {
@@ -30,7 +38,9 @@ const LandingPage = () => {
             <div className="py-6 px-10 md:px-20 w-full bg-gradient-to-br from-orange-50 via-orange-100 to-orange-200 min-h-full pb-56">
                 <nav className="relative top-0 flex flex-col sm:flex-row gap-6 sm:gap-0 justify-between mb-20 items-center">
                     <h1 className="text-xl font-bold text-black">Interview Prep AI</h1>
-                    <button onClick={handleLoginSignUp} className="bg-orange-400 px-4 py-2 rounded-3xl text-white cursor-pointer">Login / Signup</button>
+                    {user ?
+                        <ProfileInfoCard />
+                        : <button onClick={handleLoginSignUp} className="bg-orange-400 px-4 py-2 rounded-3xl text-white cursor-pointer">Login / Signup</button>}
                 </nav>
                 <div className="flex flex-col xl:flex-row justify-between items-center">
                     <div className="mb-10 xl:mb-0">
