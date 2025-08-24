@@ -7,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { CARD_BG } from "../../utils/data";
 import moment from 'moment';
 import SummaryCard from "../../components/Card/SummaryCard";
+import Modal from "../../components/Modal";
+import CreateSessionForm from "./CreateSessionForm";
 
 
 export const Dashboard = () => {
     const navigate = useNavigate();
 
-    // const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openDeleteAlert, setOpenDeleteAlert] = useState({ open: false, data: null });
     const [sessions, setSessions] = useState([]);
 
@@ -40,7 +42,7 @@ export const Dashboard = () => {
                     key={data?._id}
                     role={data?.role || ""}
                     colors={CARD_BG[index % CARD_BG.length]}
-                    topicToFocus={data?.topicToFocus || ""}
+                    topicsToFocus={data?.topicsToFocus || ""}
                     experience={data?.experience || ""}
                     questions={data?.questions || ""}
                     description={data?.description || ""}
@@ -49,10 +51,19 @@ export const Dashboard = () => {
                     onDelete={() => setOpenDeleteAlert({ open: true, data })}
                 />
             })}
-            <div className="flex gap-3  items-center justify-center w-fit text-3xs text-white bg-primary px-10 py-3 rounded-4xl fixed bottom-20 right-30">
+            <div className="flex gap-3  items-center justify-center w-fit text-3xs text-white bg-primary px-10 py-3 rounded-4xl fixed bottom-5 right-5"
+                onClick={() => setOpenCreateModal(true)}>
                 <Plus size={16} />
                 <label>Add new</label>
             </div>
+            <Modal
+                open={openCreateModal}
+                onClose={() => setOpenCreateModal(false)}
+            >
+                <div>
+                    <CreateSessionForm />
+                </div>
+            </Modal>
         </DashboardLayout>
     )
 }
