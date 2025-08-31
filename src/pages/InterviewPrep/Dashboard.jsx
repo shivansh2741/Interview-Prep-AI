@@ -37,20 +37,22 @@ export const Dashboard = () => {
 
     return (
         <DashboardLayout>
-            {sessions.map((data, index) => {
-                return <SummaryCard
-                    key={data?._id}
-                    role={data?.role || ""}
-                    colors={CARD_BG[index % CARD_BG.length]}
-                    topicsToFocus={data?.topicsToFocus || ""}
-                    experience={data?.experience || ""}
-                    questions={data?.questions || ""}
-                    description={data?.description || ""}
-                    lastUpdated={data?.updatedAt ? moment(data.updatedAt).format("Do MMM YYYY") : ""}
-                    onSelect={() => navigate(`/interview-prep/${data?._id}`)}
-                    onDelete={() => setOpenDeleteAlert({ open: true, data })}
-                />
-            })}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4  justify-items-center">
+                {sessions.map((data, index) => {
+                    return <SummaryCard
+                        key={data?._id}
+                        role={data?.role || ""}
+                        colors={CARD_BG[index % CARD_BG.length]}
+                        topicsToFocus={data?.topicsToFocus || ""}
+                        experience={data?.experience || ""}
+                        questions={data?.questions || ""}
+                        description={data?.description || ""}
+                        lastUpdated={data?.updatedAt ? moment(data.updatedAt).format("Do MMM YYYY") : ""}
+                        onSelect={() => navigate(`/interview-prep/${data?._id}`)}
+                        onDelete={() => setOpenDeleteAlert({ open: true, data })}
+                    />
+                })}
+            </div>
             <div className="flex gap-3  items-center justify-center w-fit text-3xs text-white bg-primary px-10 py-3 rounded-4xl fixed bottom-5 right-5"
                 onClick={() => setOpenCreateModal(true)}>
                 <Plus size={16} />

@@ -37,7 +37,7 @@ const UserProvider = ({ children }) => {
         }
 
         fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const updateUser = (userData) => {

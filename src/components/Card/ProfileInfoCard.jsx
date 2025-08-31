@@ -11,6 +11,7 @@ const ProfileInfoCard = () => {
         clearUser();
         navigate("/");
     }
+
     return (
         <div className="flex gap-4 items-center">
             <img src={user?.profileImageUrl} className="h-12 w-12 rounded-4xl" />
