@@ -7,6 +7,9 @@ import axiosInstance from "../../../utils/axiosInstance";
 import { API_PATHS } from "../../../utils/apiPaths";
 import { AnimatePresence, motion } from "framer-motion";
 import QuestionCard from "../../../components/Card/QuestionCard";
+import AIResponsePreview from "./AIResponsePreview";
+import Drawer from "../../../components/Drawer";
+import SkeletonLoader from "../../../components/Loader/SkeletonLoader";
 
 const InterviewPrep = () => {
     const { sessionId } = useParams();
@@ -17,6 +20,8 @@ const InterviewPrep = () => {
 
     const [explanation, setExplanation] = useState(false);
     const [openLeanMoreDrawer, setOpenLeanMoreDrawer] = useState(false);
+
+    console.log(explanation)
 
     const fetchSessionById = async () => {
         try {
@@ -33,11 +38,52 @@ const InterviewPrep = () => {
         }
     }
 
-    const generateConceptExplanation = () => { }
+    const generateConceptExplanation = async (question) => {
+        try {
+            setErrMessage("");
+            setExplanation(null);
+
+            setIsLoading(true);
+            setOpenLeanMoreDrawer(true);
+
+            const response = await axiosInstance.post(
+                API_PATHS.AI.GENERATE_EXPLANATION,
+                {
+                    question
+                }
+            );
+
+            if (response.data) {
+                setExplanation(response.data.data);
+            }
+        }
+        catch (error) {
+            setExplanation(null);
+            setErrMessage("Failed to generate explanation. Try again later.");
+            console.log(`Error: ${error}`);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
 
     const generateMoreQuestions = () => { }
 
-    const toggleQuestionPinStatus = () => { }
+    const toggleQuestionPinStatus = async (questionId) => {
+        try {
+            const response = await axiosInstance.post(API_PATHS.QUESTION.PIN(questionId));
+
+            console.log(response);
+
+            if (response.data && response.data.question) {
+                //toast Success
+                fetchSessionById();
+            }
+        }
+        catch (error) {
+            console.log(`Error: ${error}`)
+        }
+    }
 
 
     useEffect(() => {
@@ -103,7 +149,23 @@ const InterviewPrep = () => {
                         </div>
                     </div>
                 </div>
-
+                <div>
+                    <Drawer
+                        isOpen={openLeanMoreDrawer}
+                        onClose={() => setOpenLeanMoreDrawer(false)}
+                        title={!isLoading && explanation?.title}
+                    >
+                        {errMessage && (
+                            <p className="flex gap-2 text-sm text-amber-600 font-medium">
+                                {/* icon here */}
+                            </p>
+                        )}
+                        {isLoading && <SkeletonLoader />}
+                        {!isLoading && explanation && (
+                            <AIResponsePreview content={explanation?.explanation} />
+                        )}
+                    </Drawer>
+                </div>
             </DashboardLayout>
         </div>
     );
