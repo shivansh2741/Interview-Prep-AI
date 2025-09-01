@@ -10,6 +10,10 @@ import QuestionCard from "../../../components/Card/QuestionCard";
 import AIResponsePreview from "./AIResponsePreview";
 import Drawer from "../../../components/Drawer";
 import SkeletonLoader from "../../../components/Loader/SkeletonLoader";
+import { ListPlus } from "@phosphor-icons/react";
+import toast from "react-hot-toast";
+import SpinnerLoader from "../../../components/Loader/SpinnerLoader";
+
 
 const InterviewPrep = () => {
     const { sessionId } = useParams();
@@ -17,11 +21,11 @@ const InterviewPrep = () => {
     const [sessionData, setSessionData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errMessage, setErrMessage] = useState("");
+    const [isUpdateLoader, setIsUpdateLoader] = useState(false);
 
     const [explanation, setExplanation] = useState(false);
     const [openLeanMoreDrawer, setOpenLeanMoreDrawer] = useState(false);
 
-    console.log(explanation)
 
     const fetchSessionById = async () => {
         try {
@@ -67,16 +71,50 @@ const InterviewPrep = () => {
         }
     }
 
-    const generateMoreQuestions = () => { }
+    const uploadMoreQuestions = async () => {
+        try {
+            setIsUpdateLoader(true);
+
+            const response = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS,
+                {
+                    role: sessionData?.role,
+                    experience: sessionData?.experience,
+                    topicsToFocus: sessionData?.topicsToFocus,
+                    numberOfQuestions: 10,
+                }
+            );
+
+            const generatedQuestions = response.data.data;
+
+            const addToSession = await axiosInstance.post(API_PATHS.QUESTION.ADD_QUESTION, {
+                sessionId,
+                questions: generatedQuestions
+            });
+
+            if (addToSession.data) {
+                toast.success("Added more Q&A !!");
+                fetchSessionById();
+            }
+        }
+        catch (error) {
+            if (error.response && error.response.data.message) {
+                setErrMessage(error.response.data.message);
+            }
+            else {
+                setErrMessage("Something went wrong. Please try again.")
+            }
+        }
+        finally {
+            setIsUpdateLoader(false);
+        }
+    }
 
     const toggleQuestionPinStatus = async (questionId) => {
         try {
             const response = await axiosInstance.post(API_PATHS.QUESTION.PIN(questionId));
 
-            console.log(response);
-
             if (response.data && response.data.question) {
-                //toast Success
+                toast.success("Question Pinned Successfully !!")
                 fetchSessionById();
             }
         }
@@ -142,6 +180,24 @@ const InterviewPrep = () => {
                                                     toggleQuestionPinStatus(data._id)
                                                 }
                                             />
+                                            {!isLoading &&
+                                                sessionData?.questions?.length === index + 1 && (
+                                                    <div className="flex items-center justify-center mt-5">
+                                                        <button
+                                                            className="flex items-center gap-3 text-sm text-white font-medium bg-black px-5 py-2 mr-2 rounded text-nowrap cursor-pointer"
+                                                            disabled={isLoading || isUpdateLoader}
+                                                            onClick={uploadMoreQuestions}
+                                                        >
+                                                            {isUpdateLoader ? (
+                                                                <SpinnerLoader size="w-6 h-6" />
+                                                            )
+                                                                : (<ListPlus size={12} />)
+                                                            }{" "}
+                                                            Load More
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
                                         </motion.div>
                                     );
                                 })}
