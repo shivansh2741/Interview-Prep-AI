@@ -7,6 +7,7 @@ import SignUp from "../Signup";
 import { UserContext } from "../../context/UserProvider";
 import { useNavigate } from "react-router-dom";
 import ProfileInfoCard from "../../components/Card/ProfileInfoCard";
+import LandingPageImage from "../../assets/Interview-Preparation-Page.png"
 
 
 const LandingPage = () => {
@@ -62,7 +63,7 @@ const LandingPage = () => {
             <div className="w-full min-h-full bg-white z-10">
                 <div className="-mt-36 flex items-center justify-center bg-color">
                     <div className="p-1 bg-orange-200 rounded-lg">
-                        <img src="https://www.designgurus.io/imgs/dg_default.png" alt="interview-prep-dashboard" className="min-h-70 min-w-50 h-[35vw] sm:w-[40vw] border-2 border-orange-300 shadow-orange-500" />
+                        <img src={LandingPageImage} alt="interview-prep-dashboard" className="min-h-50 min-w-50 h-[35vw] sm:w-[70vw] border-2 border-orange-300 shadow-orange-400 shadow-lg" />
                     </div>
                 </div>
             </div>

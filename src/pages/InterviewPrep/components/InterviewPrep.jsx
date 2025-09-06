@@ -5,6 +5,7 @@ import RoleInfoHeader from "./RoleInfoHeader";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import axiosInstance from "../../../utils/axiosInstance";
 import { API_PATHS } from "../../../utils/apiPaths";
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import QuestionCard from "../../../components/Card/QuestionCard";
 import AIResponsePreview from "./AIResponsePreview";
