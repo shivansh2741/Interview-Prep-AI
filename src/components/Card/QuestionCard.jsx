@@ -29,7 +29,7 @@ const QuestionCard = ({
 
     return (
         <>
-            <div className="bg-white overflow-hidden mb-4 py-4 px-5 shadow-xl shadow-gray-100/70 border border-gray-100/60 group">
+            <div className="bg-white overflow-hidden mb-4 py-4 px-5 shadow-xl shadow-gray-100/70 border border-gray-100/60 group hover:scale-110 hover:translate-x-[60px] transition-all duration-300">
                 <div className="flex items-start justify-between cursor-pointer">
                     <div className="flex items-start gap-3.5">
                         <span className="text-xs md:text-[15px] font-semibold text-gray-400">
@@ -42,7 +42,7 @@ const QuestionCard = ({
                         </h3>
                     </div>
 
-                    <div className="flex items-center justify-end ml-4 relative">
+                    <div className="flex items-center justify-end ml-4 relative h-8">
                         <div
                             className={`flex ${isExpanded ? "md:flex" : "md:hidden group-hover:flex"}`}>
                             <button className="flex items-center gap-2 text-xs text-indigo-800 font-medium bg-indigo-50 px-3 py-1 mr-2 rounded text-nowrap border border-indigo-50 hover:border-indigo-200 cursor-pointer"
@@ -71,7 +71,7 @@ const QuestionCard = ({
                     <div
                         ref={contentRef}
                         className="mt-4 text-gray-700 bg-gray-50 px-5 py-3 rounded-lg">
-                            <AIResponsePreview content={answer} />
+                        <AIResponsePreview content={answer} />
                     </div>
                 </div>
             </div>
