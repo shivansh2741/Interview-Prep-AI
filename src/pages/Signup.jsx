@@ -4,6 +4,7 @@ import { UserContext } from "../context/UserProvider";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import { useNavigate } from "react-router-dom";
+import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
 
 const SignUp = (props) => {
 
@@ -12,6 +13,7 @@ const SignUp = (props) => {
     const [signupData, setSignupData] = useState({ name: '', email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
     const { updateUser } = useContext(UserContext);
+    const [profilePhoto, setProfilePhoto] = useState(null);
 
     const navigate = useNavigate();
 
@@ -24,6 +26,28 @@ const SignUp = (props) => {
                 [name]: value,
             }
         })
+    }
+
+    const uploadImage = async (profilePhoto) => {
+        try {
+            if (!profilePhoto) {
+                throw new Error("No file selected");
+            }
+
+            const formData = new FormData();
+            formData.append("image", profilePhoto); // 'image' should match the multer field name
+
+            const response = await axiosInstance.post(API_PATHS.IMAGE.UPLOAD_IMAGE, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error("Image upload failed:", error);
+            throw error;
+        }
     }
 
     const formDataValidation = (data) => {
@@ -69,15 +93,17 @@ const SignUp = (props) => {
 
         if (formDataValidation(signupData)) {
             try {
-                // if(profilePic){
-                //     const imageUploadRes = await uploadImage(profilePic);
-                //     profileImageUrl = imageUploadRes.imageUrl || "";
-                // } uploadImage functoon at 1:59
+                let profileImageUrl;
+                if (profilePhoto) {
+                    const imageUploadRes = await uploadImage(profilePhoto);
+                    profileImageUrl = imageUploadRes.imageUrl || "";
+                }
+               
                 const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
                     name: signupData.name,
                     email: signupData.email,
-                    password: signupData.password
-                    // profileImageUrl,
+                    password: signupData.password,
+                    profileImageUrl
                 });
 
                 const { token } = response.data;
@@ -104,13 +130,14 @@ const SignUp = (props) => {
     }
 
     return (
-        <div className="flex flex-col lg:px-12">
+        <div className="flex flex-col lg:px-12 overflow-auto">
             <header className="mb-8">
                 <h2 className="font-bold text-2xl">Welcome</h2>
                 <span className="text-xs">Please enter your details</span>
             </header>
             <form onSubmit={handleSubmit} className="mb-6">
                 <div className="flex flex-col gap-6 w-full mb-10">
+                    <ProfilePhotoSelector image={profilePhoto} setImage={setProfilePhoto} />
                     <div>
                         <Input
                             value={signupData.name}
