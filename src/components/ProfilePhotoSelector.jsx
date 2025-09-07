@@ -22,15 +22,15 @@ const ProfilePhotoSelector = ({
         <div className="flex flex-col items-center gap-2 justify-center">
             {!preview ?
                 <>
-                    <label className="text-sm font-medium bg-orange-100 flex gap-2 px-6 py-6 rounded-full">
+                    <label className="text-sm font-medium bg-orange-100 flex gap-2 px-6 py-6 rounded-full cursor-pointer">
                         <div className="relative">
                             <User size={48} weight="thin" className="text-primary" />
                             <div>
                                 <CloudArrowUp size={32} weight="thin" className="absolute top-12 left-10 bg-primary rounded-full p-2" />
                             </div>
                         </div>
+                        <input type="file" accept="image/*" onChange={handleImageChange} className="absolute opacity-0" />
                     </label>
-                    <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                 </> :
 
                 <div className="relative">

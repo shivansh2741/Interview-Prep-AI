@@ -98,7 +98,7 @@ const SignUp = (props) => {
                     const imageUploadRes = await uploadImage(profilePhoto);
                     profileImageUrl = imageUploadRes.imageUrl || "";
                 }
-               
+
                 const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
                     name: signupData.name,
                     email: signupData.email,
@@ -130,14 +130,14 @@ const SignUp = (props) => {
     }
 
     return (
-        <div className="flex flex-col lg:px-12 overflow-auto">
+        <div className="flex flex-col lg:px-12 max-h-screen">
             <header className="mb-8">
                 <h2 className="font-bold text-2xl">Welcome</h2>
                 <span className="text-xs">Please enter your details</span>
             </header>
             <form onSubmit={handleSubmit} className="mb-6">
                 <div className="flex flex-col gap-6 w-full mb-10">
-                    <ProfilePhotoSelector image={profilePhoto} setImage={setProfilePhoto} />
+                    <ProfilePhotoSelector setImage={setProfilePhoto} />
                     <div>
                         <Input
                             value={signupData.name}
