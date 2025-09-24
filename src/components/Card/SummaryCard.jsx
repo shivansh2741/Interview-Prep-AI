@@ -40,14 +40,14 @@ const SummaryCard = ({
             </div>
 
             <div className="flex flex-col gap-4">
-                <div className="flex gap-3">
-                    <div className="w-fit text-xs text-gray-600 border border-gray-400 px-2 py-1 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300">
+                <div className="flex flex-wrap gap-3 justify-center">
+                    <div className="px-2 py-1 text-xs text-gray-600 border border-gray-400 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300 flex items-center">
                         Experience: {experience} {experience === 1 ? "Year" : "Years"}
                     </div>
-                    <div className="w-fit text-xs text-gray-600 border border-gray-400 px-2 py-1 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300">
+                    <div className="px-2 py-1 text-xs text-gray-600 border border-gray-400 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300 flex items-center">
                         {questions.length} Q&A
                     </div>
-                    <div className="w-fit text-xs text-gray-600 border border-gray-400 px-2 py-1 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300">
+                    <div className="px-2 py-1 text-xs text-gray-600 border border-gray-400 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300 flex items-center sm:max-w-none truncate sm:whitespace-normal">
                         Last Updated: {lastUpdated}
                     </div>
                 </div>
@@ -55,6 +55,7 @@ const SummaryCard = ({
                     {description}
                 </div>
             </div>
+
         </div>
     )
 }
