@@ -11,6 +11,7 @@ import Modal from "../../components/Modal";
 import CreateSessionForm from "./CreateSessionForm";
 import toast from "react-hot-toast";
 import DeleteAlertContent from "../../components/DeleteAlertContent";
+import DashboardSkeleton from "../../components/Loader/DashboardLoader";
 
 
 export const Dashboard = () => {
@@ -19,6 +20,7 @@ export const Dashboard = () => {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openDeleteAlert, setOpenDeleteAlert] = useState({ open: false, data: null });
     const [sessions, setSessions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
     const fetchAllSessions = async () => {
@@ -29,10 +31,14 @@ export const Dashboard = () => {
         catch (error) {
             console.log("Error fetching sessions", error);
         }
+        finally {
+            setLoading(false);
+        }
     }
 
     const deleteSession = async (sessionData) => {
         try {
+            setLoading(true);
             await axiosInstance.delete(API_PATHS.SESSION.DELETE(sessionData?._id));
 
             toast.success("Session Deleted Successfully");
@@ -45,29 +51,35 @@ export const Dashboard = () => {
         catch (error) {
             console.log(`Error: ${error}`)
         }
+        finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
+        setLoading(true);
         fetchAllSessions();
     }, [])
 
     return (
         <DashboardLayout>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4  justify-items-center">
-                {sessions.map((data, index) => {
-                    return <SummaryCard
-                        key={data?._id}
-                        role={data?.role || ""}
-                        colors={CARD_BG[index % CARD_BG.length]}
-                        topicsToFocus={data?.topicsToFocus || ""}
-                        experience={data?.experience || ""}
-                        questions={data?.questions || ""}
-                        description={data?.description || ""}
-                        lastUpdated={data?.updatedAt ? moment(data.updatedAt).format("Do MMM YYYY") : ""}
-                        onSelect={() => navigate(`/interview-prep/${data?._id}`)}
-                        onDelete={() => setOpenDeleteAlert({ open: true, data })}
-                    />
-                })}
+            <div className={`${loading ? "w-full h-full" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4  justify-items-center"}`}>
+                {
+                    loading ? <DashboardSkeleton /> :
+                        sessions.map((data, index) => {
+                            return <SummaryCard
+                                key={data?._id}
+                                role={data?.role || ""}
+                                colors={CARD_BG[index % CARD_BG.length]}
+                                topicsToFocus={data?.topicsToFocus || ""}
+                                experience={data?.experience || ""}
+                                questions={data?.questions || ""}
+                                description={data?.description || ""}
+                                lastUpdated={data?.updatedAt ? moment(data.updatedAt).format("Do MMM YYYY") : ""}
+                                onSelect={() => navigate(`/interview-prep/${data?._id}`)}
+                                onDelete={() => setOpenDeleteAlert({ open: true, data })}
+                            />
+                        })}
             </div>
             <div className="flex gap-3  items-center justify-center w-fit text-3xs text-white bg-primary px-10 py-3 rounded-4xl fixed bottom-5 right-5"
                 onClick={() => setOpenCreateModal(true)}>

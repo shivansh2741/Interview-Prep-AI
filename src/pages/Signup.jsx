@@ -5,6 +5,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import { useNavigate } from "react-router-dom";
 import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
+import SpinnerLoader from "../components/Loader/SpinnerLoader";
 
 const SignUp = (props) => {
 
@@ -13,6 +14,7 @@ const SignUp = (props) => {
     const [signupData, setSignupData] = useState({ name: '', email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
     const { updateUser } = useContext(UserContext);
+    const [dataLoading, setDataLoading] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState(null);
 
     const navigate = useNavigate();
@@ -92,6 +94,7 @@ const SignUp = (props) => {
         e.preventDefault();
 
         if (formDataValidation(signupData)) {
+            setDataLoading(true);
             try {
                 let profileImageUrl;
                 if (profilePhoto) {
@@ -121,6 +124,9 @@ const SignUp = (props) => {
                 else {
                     console.log('Something went wrong. Please try again.')
                 }
+            }
+            finally {
+                setDataLoading(false)
             }
         }
     }
@@ -174,7 +180,7 @@ const SignUp = (props) => {
 
                 </div>
                 <button type="submit" className="bg-primary text-white py-2 px-4 rounded-md w-full">
-                    Sign Up
+                    {dataLoading ? <SpinnerLoader /> : "Sign Up"}
                 </button>
             </form >
             <div className="text-xs">Do not have an account ? <span className="cursor-pointer underline font-bold text-primary" onClick={handleRedirect}>Login</span></div>

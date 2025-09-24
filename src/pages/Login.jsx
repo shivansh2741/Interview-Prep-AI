@@ -4,6 +4,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from '../utils/apiPaths';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
+import SpinnerLoader from "../components/Loader/SpinnerLoader";
 
 const Login = (props) => {
 
@@ -11,6 +12,7 @@ const Login = (props) => {
 
     const [loginData, setLoginData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
+    const [loadingData, setLoadingData] = useState(false);
     const { updateUser } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -63,7 +65,8 @@ const Login = (props) => {
         e.preventDefault();
 
         if (formDataValidation(loginData)) {
-            const { email, password } = loginData; 
+            setLoadingData(true);
+            const { email, password } = loginData;
             try {
                 const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
                     email,
@@ -85,6 +88,9 @@ const Login = (props) => {
                 else {
                     console.log('Something went wrong. Please try again.')
                 }
+            }
+            finally {
+                setLoadingData(false);
             }
         }
     }
@@ -126,7 +132,7 @@ const Login = (props) => {
 
                 </div>
                 <button type="submit" className="bg-orange-400 text-white py-2 px-4 rounded-md w-full">
-                    Log In
+                    {loadingData ? <SpinnerLoader /> : "Login"}
                 </button>
             </form >
             <div className="text-xs">Do not have an account ? <span className="cursor-pointer underline font-bold text-primary" onClick={handleRedirect}>Sign Up</span></div>

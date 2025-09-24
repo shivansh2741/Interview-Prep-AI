@@ -29,7 +29,7 @@ const QuestionCard = ({
 
     return (
         <>
-            <div className="bg-white overflow-hidden mb-4 py-4 px-5 shadow-xl shadow-gray-100/70 border border-gray-100/60 group hover:scale-110 hover:translate-x-[60px] transition-all duration-300">
+            <div className="bg-white overflow-hidden mb-4 py-4 px-5 shadow-xl shadow-gray-100/70 border border-gray-100/60 group transition-all duration-300">
                 <div className="flex items-start justify-between cursor-pointer">
                     <div className="flex items-start gap-3.5">
                         <span className="text-xs md:text-[15px] font-semibold text-gray-400">
