@@ -99,6 +99,7 @@ export const Dashboard = () => {
                 open={openDeleteAlert?.open}
                 onClose={() => setOpenDeleteAlert({ data: null, open: false })}
                 title="Delete Alert"
+                styleClass="text-center"
             >
                 <div className="w-full">
                     <DeleteAlertContent
