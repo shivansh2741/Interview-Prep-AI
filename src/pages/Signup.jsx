@@ -86,7 +86,7 @@ const SignUp = (props) => {
 
         setFormErrors(errors);
 
-        if (Object.keys(formErrors).length === 0) return true;
+        if (Object.keys(errors).length === 0) return true;
         else return false;
     }
 
@@ -126,7 +126,7 @@ const SignUp = (props) => {
                 }
             }
             finally {
-                setDataLoading(false)
+                setDataLoading(false);
             }
         }
     }
