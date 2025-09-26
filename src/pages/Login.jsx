@@ -11,7 +11,7 @@ const Login = (props) => {
     const { setCurrentPage } = props;
 
     const [loginData, setLoginData] = useState({ email: '', password: '' });
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState();
     const [loadingData, setLoadingData] = useState(false);
     const { updateUser } = useContext(UserContext);
 
@@ -28,71 +28,37 @@ const Login = (props) => {
         })
     }
 
-    const formDataValidation = (data) => {
-        const { email, password } = data;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-        const errors = {};
-
-        //email check
-        if (!emailRegex.test(email)) {
-            errors.email = "Enter a valid email address";
-        }
-
-        //password check
-        if (password.length < 8) {
-            errors.password = "Password must be at least 8 characters long.";
-        } else if (!/[A-Z]/.test(password)) {
-            errors.password = "Password must contain at least one uppercase letter.";
-        } else if (!/[a-z]/.test(password)) {
-            errors.password = "Password must contain at least one lowercase letter.";
-        } else if (!/[0-9]/.test(password)) {
-            errors.password = "Password must contain at least one number.";
-        }
-        else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-            errors.password = "Password must contain at least one special character.";
-        }
-        else if (/\s/.test(password)) {
-            errors.password = "Password must not contain spaces.";
-        }
-
-        setFormErrors(errors);
-
-        if (Object.keys(formErrors).length === 0) return true;
-        else return false;
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (formDataValidation(loginData)) {
-            setLoadingData(true);
-            const { email, password } = loginData;
-            try {
-                const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
-                    email,
-                    password
-                });
+        setLoadingData(true);
+        const { email, password } = loginData;
+        try {
+            const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+                email,
+                password
+            });
 
-                const token = response.data.token;
+            const token = response.data.token;
 
-                if (token) {
-                    updateUser(response.data)
-                    navigate('/dashboard');
-                }
-                return response.data;
+            if (token) {
+                updateUser(response.data)
+                navigate('/dashboard');
             }
-            catch (error) {
-                if (error.response && error.response.data.message) {
-                    console.log(error.response.data.message);
-                }
-                else {
-                    console.log('Something went wrong. Please try again.')
-                }
+            return response.data;
+        }
+        catch (error) {
+            if (error.response && error.response.data.message) {
+                setFormErrors('Incorrect email Id or password.');
             }
-            finally {
-                setLoadingData(false);
+            else {
+                setFormErrors('Something went wrong. Please try again.');
             }
         }
+        finally {
+            setLoadingData(false);
+        }
+
     }
 
     const handleRedirect = () => {
@@ -107,6 +73,8 @@ const Login = (props) => {
             </header>
             <form onSubmit={handleSubmit} className="mb-6">
                 <div className="flex flex-col gap-6 w-full mb-10">
+                    {formErrors &&
+                        <span className="text-2xs font-semibold text-red-600 bg-red-100 px-4 py-2">{`* ${formErrors}`}</span>}
                     <div>
                         <Input
                             value={loginData.email}
@@ -115,8 +83,6 @@ const Login = (props) => {
                             handleInputChange={handleInputChange}
                             label="Email"
                         />
-                        {formErrors.email &&
-                            <span className="text-xs text-red-600">{formErrors.email}</span>}
                     </div>
                     <div>
                         <Input
@@ -126,8 +92,6 @@ const Login = (props) => {
                             handleInputChange={handleInputChange}
                             label="Password"
                         />
-                        {formErrors.password &&
-                            <span className="text-xs text-red-600">{formErrors.password}</span>}
                     </div>
 
                 </div>
