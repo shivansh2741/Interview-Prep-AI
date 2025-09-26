@@ -39,13 +39,14 @@ export const Dashboard = () => {
     const deleteSession = async (sessionData) => {
         try {
             setLoading(true);
-            await axiosInstance.delete(API_PATHS.SESSION.DELETE(sessionData?._id));
-
-            toast.success("Session Deleted Successfully");
             setOpenDeleteAlert({
                 data: null,
                 open: false
             })
+
+            await axiosInstance.delete(API_PATHS.SESSION.DELETE(sessionData?._id));
+
+            toast.success("Session Deleted Successfully");
             fetchAllSessions();
         }
         catch (error) {
@@ -99,10 +100,16 @@ export const Dashboard = () => {
                 onClose={() => setOpenDeleteAlert({ data: null, open: false })}
                 title="Delete Alert"
             >
-                <div className="w-[30vw]">
+                <div className="w-full">
                     <DeleteAlertContent
                         content="Are you sure you want to delete this session ?"
                         onDelete={() => deleteSession(openDeleteAlert.data)}
+                        onClose={() => {
+                            setOpenDeleteAlert({
+                                data: null,
+                                open: false
+                            })
+                        }}
                     />
                 </div>
             </Modal>
