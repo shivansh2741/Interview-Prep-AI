@@ -40,7 +40,7 @@ const SummaryCard = ({
             </div>
 
             <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap gap-3 justify-center">
+                <div className="flex flex-wrap gap-1 justify-center">
                     <div className="px-2 py-1 text-xs text-gray-600 border border-gray-400 rounded-3xl group-hover:bg-orange-100 transition-colors duration-300 flex items-center">
                         Experience: {experience} {experience === 1 ? "Year" : "Years"}
                     </div>
